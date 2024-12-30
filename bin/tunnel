@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+require dirname(__DIR__).'/vendor/autoload.php';
+
+use App\Command\CreateTunnelCommand;
+use App\Command\ServiceDetailsCommand;
+use App\Service\ConfigurationManager;
+use App\Service\TunnelManager;
+use App\Service\AWSClient;
+use Symfony\Component\Console\Application;
+
+$application = new Application('Tunnel Manager', '1.0.0');
+
+// Initialize services
+$configManager = new ConfigurationManager();
+$awsClient = new AWSClient();
+$tunnelManager = new TunnelManager($awsClient, $configManager);
+
+// Register commands
+$application->add(new CreateTunnelCommand($tunnelManager));
+$application->add(new ServiceDetailsCommand($tunnelManager));
+
+$application->run();

@@ -1,0 +1,30 @@
+aws:
+  default_region: eu-central-1
+
+tunnel-symfony-config:
+  # ${PLACEHOLDER} in all paths will be automatically replaced with the value provided to --environment
+  jumphost-filter: ${PLACEHOLDER}-ecs-autoscaled
+  services:
+    database:
+      host:
+        ssm-param: /${PLACEHOLDER}/database/host
+      remote-port:
+        value: "3306"
+      local-port-range:
+        start: 13306
+        end: 13315
+      service-details:
+        - /${PLACEHOLDER}/database/username
+        - /${PLACEHOLDER}/database/password
+        - /${PLACEHOLDER}/database/name
+    
+    redis:
+      host:
+        ssm-param: /${PLACEHOLDER}/redis/host
+      remote-port:
+        value: "6379"
+      local-port-range:
+        start: 16379
+        end: 16388
+      service-details:
+        - /${PLACEHOLDER}/redis/auth_token
